@@ -29,3 +29,48 @@ This ensures that if the same triplet appears again, it will overwrite the previ
 
 #The triple nested loops make this approach very slow, especially for large input sizes, as it has a time complexity of 𝑂(𝑛^3), 
 # where 𝑛 is the number of elements in the array.
+
+
+
+
+
+
+#SOLUTION 2
+'''To optimize your solution, you can reduce the time complexity from 𝑂(𝑛^3) to 𝑂(𝑛^2) by using a two-pointer approach after sorting the array. 
+This eliminates the need for the triple nested loops and improves efficiency.'''
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        # Sort the array to simplify the search for triplets
+        nums.sort()
+        result = []
+        
+        # Loop through each element, treating it as the first element of the triplet
+        for i in range(len(nums)):
+            # Skip duplicate elements to avoid duplicate triplets in the result
+            if i > 0 and nums[i] == nums[i - 1]:
+                continue
+            
+            # Two-pointer approach to find the remaining two numbers
+            left, right = i + 1, len(nums) - 1
+            while left < right:
+                total = nums[i] + nums[left] + nums[right]
+                
+                if total == 0:
+                    result.append([nums[i], nums[left], nums[right]])
+                    
+                    # Move pointers to avoid duplicates
+                    while left < right and nums[left] == nums[left + 1]:
+                        left += 1
+                    while left < right and nums[right] == nums[right - 1]:
+                        right -= 1
+                    
+                    left += 1
+                    right -= 1
+                elif total < 0:
+                    # If the sum is less than zero, move the left pointer to increase the sum
+                    left += 1
+                else:
+                    # If the sum is greater than zero, move the right pointer to decrease the sum
+                    right -= 1
+        
+        return result
