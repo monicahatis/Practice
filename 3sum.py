@@ -26,3 +26,6 @@ Sorting ensures that triplets like [1, -1, 0] and [0, 1, -1] are treated as the 
 
 The sorted triplet is converted into a string str(sorted_answer) and used as the key in the three_sums dictionary. 
 This ensures that if the same triplet appears again, it will overwrite the previous one, effectively preventing duplicates.'''
+
+#The triple nested loops make this approach very slow, especially for large input sizes, as it has a time complexity of 𝑂(𝑛^3), 
+# where 𝑛 is the number of elements in the array.
