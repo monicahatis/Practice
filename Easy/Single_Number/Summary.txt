@@ -1,0 +1,78 @@
+EXPLANATION FOR EACH STEP
+
+STEP 1: XOR all elements to get xor = a ^ b
+
+xor = 0
+for num in nums:
+    xor ^= num
+
+Objective: Find the XOR of the two unique numbers, a and b.
+
+How It Works: By XOR-ing all elements in the array, pairs of identical numbers cancel each other out because x \, \text{^} \, x = 0. This leaves us with xor = a ^ b, where a and b are the two unique numbers that appear only once.
+
+Example:
+
+Suppose nums = [1, 2, 1, 3, 2, 5].
+XOR all elements: 1 ^ 2 ^ 1 ^ 3 ^ 2 ^ 5.
+Pairs cancel out: = (1 ^ 1) ^ (2 ^ 2) ^ 3 ^ 5 = 0 ^ 0 ^ 3 ^ 5 = 3 ^ 5.
+Result: xor = 3 ^ 5, which is the XOR of the two unique numbers.
+
+
+STEP 2: Find the rightmost set bit in xor
+
+diff = xor & -xor
+
+Objective: Isolate one bit where a and b differ. This bit is crucial because it helps us separate a and b into two different groups.
+
+How It Works:
+
+xor contains a ^ b, which must have at least one bit set to 1 (since a and b are distinct). A set bit indicates that a and b differ at that bit position.
+xor & -xor isolates the rightmost set bit in xor. This is achieved by taking the two’s complement of xor (which is -xor in Python) and then performing a bitwise AND with xor.
+This operation leaves only the rightmost set bit in xor, which we’ll use as a mask to distinguish between a and b.
+Example:
+
+If xor = 3 ^ 5 = 6 (binary 110), the rightmost set bit is the second position from the right (binary 010).
+So, diff = 6 & -6 = 2 (binary 010).
+
+
+STEP 3: Partition numbers into two groups based on diff and XOR within each group
+python
+Copy code
+a, b = 0, 0
+for num in nums:
+    if num & diff:
+        a ^= num
+    else:
+        b ^= num
+Objective: Use the bit identified by diff to split the numbers in nums into two groups—one containing numbers with this bit set to 1, and the other with it set to 0. XOR-ing all numbers within each group will isolate the unique numbers a and b.
+
+How It Works:
+
+For each number in nums, we check whether num & diff is non-zero. This tells us if the number has the same bit set as diff.
+If num & diff is True (non-zero), XOR it with a.
+If num & diff is False (zero), XOR it with b.
+Since numbers that appear twice will cancel each other out in each group, only the unique numbers a and b remain in their respective groups.
+Example:
+
+Given nums = [1, 2, 1, 3, 2, 5] and diff = 2 (binary 010):
+Group 1 (bit set to 1 at diff): [2, 2, 3]
+Group 2 (bit set to 0 at diff): [1, 1, 5]
+After XOR-ing each group:
+a = 3 (from Group 1: 2 ^ 2 ^ 3 = 0 ^ 3 = 3)
+b = 5 (from Group 2: 1 ^ 1 ^ 5 = 0 ^ 5 = 5)
+This results in a = 3 and b = 5, which are the two unique numbers.
+
+
+STEP 4: Return Result
+
+return [a, b]
+
+Objective: Return the two unique numbers found.
+Since the order of a and b doesn’t matter, [a, b] is returned as the result.
+
+Summary
+XOR all elements to get xor = a ^ b.
+Find a set bit in xor to differentiate a and b.
+Partition numbers into two groups using the set bit, then XOR within each group to isolate a and b.
+Return the result as [a, b].
+This approach has a time complexity of 𝑂(𝑛) and space complexity of 𝑂(1), meeting the problem’s constraints.
